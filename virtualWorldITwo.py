@@ -21,11 +21,12 @@ class Model:
     """  
     def __init__(self, boundarySize):
         """ contructor for the WorldModel class"""
-        self.robot = Robot()
         self.light = LEDRing([100,100]) #assumes not placed within 50 pixels of World's Edge
         self.myWalls = []
         
         self.createWorldMap(boundarySize)
+        
+        self.robot = Robot(self.myWalls, self.light)
 
     def createWorldMap(self, boundarySize):
         """ 
@@ -36,17 +37,17 @@ class Model:
         width = boundarySize[0]
         height = boundarySize[1]
         thickness = 50 #depth of border walls
-        
-        self.myWalls.append( Wall([0,0], [width,thickness]) )                   #Ceiling
-        self.myWalls.append( Wall([0,height-thickness], [width,thickness]) )    #Floor        
-        self.myWalls.append( Wall([width-thickness,0],[thickness,height]) )     #Right       
-        self.myWalls.append( Wall([0,0],[thickness,height]) )                   #Left
+                
+        self.myWalls.append( Wall([0,0], [width,thickness]))                   #Ceiling
+        self.myWalls.append( Wall([0,height-thickness], [width,thickness]))    #Floor        
+        self.myWalls.append( Wall([width-thickness,0],[thickness,height]))     #Right       
+        self.myWalls.append( Wall([0,0],[thickness,height]),color )                   #Left
 
         #Create World Obstacles
             ##None
 
-    def update(self):
-        pass #change to actuall update function
+    def update(self, action):
+        self.robot.update(action)
 
 class Drawable(object):
     """Abstract class for objects to be drawn on pygame window"""
@@ -65,7 +66,7 @@ class Drawable(object):
         self.y = position[1]
         
         assert(len(color) == 3),"Drawable Object Color not defined in RGB"
-        self.color = pygame.Color(color[0].color[1],color[2])
+        self.color = pygame.Color(color[0],color[1],color[2])
         
         assert(len(dimensions) == 2),"Drawable Object Size not defined in 2D"
         if dimensions[0] and dimensions[1] == None:
@@ -80,16 +81,10 @@ class Drawable(object):
             
     @abstractmethod    
     def draw():
-        pass## these two functions might be redundant
-    def betweenX(self, x):
-        return (self.x <= x) and (x <= self.x + self.width)
-    
-    def betweenY(self, y):
-        return (self.y <= y) and (y <= self.y + self.height)
-
+        pass
 """--------------------------------Robot----------------------------------"""
 
-         """--------------------Not Finished-----------------------"""
+"""--------------------Not Finished-----------------------"""
 class Robot(Drawable):
     def __init__(self, walls, lightSource):
         super(Robot,self).__init__([400,600],[40,None],[170,50,255])
@@ -113,16 +108,47 @@ class Robot(Drawable):
     def fwd(self):
         if (self.direction == 0):
             self.y +=-1
+            self.front(1) += -1
         elif(self.direction == 90):
             self.x += -1
+            self.front(0) += -1
         elif(self.direction == 180):
             self.y += 1
+            self.front(1) += 1
+        elif(self.direction == 270):
+            self.x += 1
+            self.front(0) += 1
+        self.sensorPack.update(self.front, self.direction)
     
     def left(self):
-        pass
+        if(self.direction == 0):
+            self.front = (self.x - self.radius, self.y)
+            self.direction = 90
+        elif(self.direction == 90):
+            self.front = (self.x, self.y+self.radius)
+            self.direction = 180
+        elif(self.direction == 180):
+            self.front = (self.x + self.radius, self.y)
+            self.direction = 270
+        elif(self.direction == 270):
+            self.front = (self.x, self.y - self.radius)
+            self.direction = 0
+        self.sensorPack.update(self.front, self.direction)
     
     def right(self):
-        pass
+        if(self.direction == 0):
+            self.front = (self.x + self.radius, self.y)
+            self.direction = 270
+        elif(self.direction == 270):
+            self.front = (self.x, self.y+self.radius)
+            self.direction = 180
+        elif(self.direction == 180):
+            self.front = (self.x - self.radius, self.y)
+            self.direction = 90
+        elif(self.direction == 90):
+            self.front = (self.x, self.y - self.radius)
+            self.direction = 0
+        self.sensorPack.update(self.front, self.direction)
     
     def checkCollision(self):
         for wall in walls:
@@ -242,10 +268,9 @@ class UltraSonicSensor(Sensor):
                 
         #if no walls in front
         #assumedly this will never happen if the world is properly bounded by walls
-        #if(len(wallsInFront) == 0):
-        #    return 1
-        assert(len(wallsInFront)),"UltraSonic: Sensor noticed no walls in front of it"
-            
+        if(len(wallsInFront) == 0):
+            return 1
+                    
         #pick closest wall
         if(len(wallsInFront)>1):
             #compares to last closest wall
@@ -265,7 +290,7 @@ class UltraSonicSensor(Sensor):
             wallToUse = wallsInFront[0]
         
         #value to return
-        assert(wallToUse),"UltraSonic: No wall chosen"
+        #assert(wallToUse),"UltraSonic: No wall chosen"
         distance = self.distanceToWall(wallToUse,position,direction)   #distance to wallToUse
         assert(distance),"UltraSonic: No distance returned"
         if(distance > 300):
@@ -329,7 +354,7 @@ class LEDRing:
         return norm
         
     
-class Wall:
+class Wall(Drawable):
     """provides a walls in the world: includes a constructor and a collision evaluator"""
     def __init__(self,position, dimensions, color=(0,0,0)):
         """
@@ -338,21 +363,45 @@ class Wall:
                     "dimensions", (x,y) length of wall
                     color, RGB turple of wall, defaults as black
         """
+        super(Wall,self).__init__(position,dimesnsions,color)
         self.x = position(0)
         self.y = position(1)
-        self.height = dimensions(0)
-        self.width = dimensions(1)
-        self.color = color
-     
-     
-    ## these two functions might be redundant
+
     def betweenX(self, x):
         return (self.x <= x) and (x <= self.x + self.width)
     
     def betweenY(self, y):
         return (self.y <= y) and (y <= self.y + self.height)
         
+"""  """  """  """  """  """  """  """  """  """  """  """  """  """  """
+                                View
+"""  """  """  """  """  """  """  """  """  """  """  """  """  """  """
+class PyGameWindowView:
+    """ A view of Galaga rendered in a Pygame window """
+    def __init__(self,model,screen):
+        self.model = model
+        self.screen = screen
         
+    def draw(self):
+        """draws all of the elements on the screen uses a series of subfunctions
+        to draw fighters, bullets, and enemy"""
+        self.screen.fill(pygame.Color(255,255,255))
+        for wall in self.model.myWalls:
+            self.drawWall(wall)
+        self.drawRobot(self.model.robot)
+        
+        pygame.display.update()
+       
+    def drawWall(self, wall):
+        """draws a rectangle for a bullet based on passed in bullet and its parameters"""
+        rectangle = pygame.Rect(wall.x,wall.y,wall.width,wall.height)
+        pygame.draw.rect(self.screen, wall.color, rectangle)
+        
+    def drawRobot(self, robot):
+        """draws a fighter from what is passed in"""
+        pygame.draw.circle(self.screen, robot.color, (robot.x, robot.y), robot.radius, 0)
+        pygame.draw.circle(self.screen, (0,0,0), robot.front, 5)
+         
 """  """  """  """  """  """  """  """  """  """  """  """  """  """  """  
                                Running Code  
 """  """  """  """  """  """  """  """  """  """  """  """  """  """  """ 
