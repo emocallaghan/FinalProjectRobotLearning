@@ -41,7 +41,7 @@ class situations:
         self.dictupdat(self)
         return self.ishappy(self)
     
-class controler:
+class controller:
     def __init__(self, ir, touch):
         self.pasthappy = 0
         self.ir = ir
@@ -78,7 +78,7 @@ if __name__=='__main__':
         ir = getir()
         touch = gettouch()
         ultra = getultra()
-        controler.sortanddo
+        controller.sortanddo()
             
             
             
