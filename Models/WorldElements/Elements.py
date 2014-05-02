@@ -34,7 +34,7 @@ class LEDRing(abstractClass.Drawable):
     def draw(self,screen):
         """draws LED ring  as a circle"""
         pygame.draw.circle(screen, (0,255,255,100), (self.x, self.y), int(0.8*self.range),1)
-        pygame.draw.circle(screen, (0,255,255,200), (self.x, self.y), int(0.3*self.range),3)
+        pygame.draw.circle(screen, (0,255,255,20), (self.x, self.y), int(0.3*self.range),3)
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
         
         

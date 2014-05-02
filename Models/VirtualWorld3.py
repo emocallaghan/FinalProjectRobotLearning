@@ -37,8 +37,9 @@ class Model:
         self.myWalls.append( Elements.Wall([0,thickness],[thickness,height-2*thickness])) #Left
 
         #Create World Obstacles
-            
-
+    def createWalls(self,position, dimensions):       
+        self.myWalls.append( Elements.Wall(position, dimensions) )
+        
     def update(self, action):
         self.robot.update(action)
         return self.robot.sensorPack.getSensorData()
