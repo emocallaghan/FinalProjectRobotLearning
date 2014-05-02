@@ -5,6 +5,6 @@ Created on Wed Apr 30 12:28:27 2014
 @author: cbeery
 """
 
-import virtualWorldTwo
+import VirtualWorld3
 
-__all__ = ['virtualWorldTwo']
+__all__ = ['VirtualWorld3']

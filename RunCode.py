@@ -7,10 +7,9 @@ Created on Wed Apr 30 12:22:24 2014
 import pygame
 from pygame.locals import *
 import time
-from abc import ABCMeta, abstractmethod
 
-from Models import virtualWorldITwo
-from Controllers import behave
+from Models import VirtualWorld3
+from Controllers import behave, EditTurtleWorld
 from Views import PygameTurtleViewer
 
         
@@ -23,15 +22,14 @@ if __name__ == '__main__':
 
     size = (1000,700)
     screen = pygame.display.set_mode(size)
-    model = virtualWorldITwo.Model(size,screen)
+    
+    model = VirtualWorld3.Model(size)
+    controller = behave.Controller() 
+    
     view = PygameTurtleViewer.View(model,screen)
-    controller = behave.Controller()    
-
+    editor = EditTurtleWorld.WorldEditor(model,screen)
 
     running = True
-    
-    startTime = time.time()
-    xTime = time.time()
     
     sensed = model.robot.sensorPack.getSensorData()
     action = None
@@ -40,6 +38,9 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            if event.type == KEYUP and event.key == pygame.K_ESCAPE:
+                running = False
+            editor.update(event)
         
         view.draw()
         """
@@ -55,6 +56,6 @@ if __name__ == '__main__':
         the view of hte model is updated for our viewing pleasure
         """
         
-        time.sleep(.01)
+        time.sleep(.05)
 
     pygame.quit()

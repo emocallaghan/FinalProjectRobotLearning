@@ -20,7 +20,7 @@ class View:
         """ draws all of the elements on the screen by calling draw function of model objects"""
         self.screen.fill(pygame.Color(255,255,255))
         for wall in self.model.myWalls:
-            wal.draw(self.screen)
+            wall.draw(self.screen)
         self.model.light.draw(self.screen)
         self.model.robot.draw(self.screen)
               

@@ -2,9 +2,9 @@
 """
 Created on Wed Apr 30 12:28:27 2014
 
-@author: cbeery
+@author: cbeeryT
 """
 
-import behave
+import behave, EditTurtleWorld
 
-__all__ = ['behave']
+__all__ = ['behave','EditTurtleWorld']

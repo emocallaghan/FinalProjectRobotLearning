@@ -1,28 +1,23 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 """
-Created on Tue Apr 22 23:41:48 2014
+Created on Fri May  2 12:22:17 2014
 
-@author: eocallaghan
+@author: cbeery
 """
 
 import pygame
 from pygame.locals import *
-import time
-from abc import ABCMeta, abstractmethod
-
-
-
+from Abstract import abstractClass
 """--------------------------------Robot----------------------------------"""
 
-"""--------------------Not Finished-----------------------"""
-class Robot(Drawable):
-    def __init__(self, walls, lightSource, world):
+class Robot(abstractClass.Drawable):
+    def __init__(self, walls, lightSource):
         super(Robot,self).__init__([600,400],[40,None],[170,50,255])
         self.front = [self.x,self.y-self.radius]
         self.direction = 0 #degrees
         self.sensorPack = SensorPack(self.front,self.direction,lightSource,walls)
         self.walls = walls
+    
     def update(self, action):
         if (action == 'fwd'):
             for i in range(10):
@@ -51,7 +46,6 @@ class Robot(Drawable):
         elif(self.direction == 270):
             self.x += 1
             self.front[0] = self.front[0] + 1
-        self.sensorPack.update(self.front, self.direction)
     
     def left(self):
         if(self.direction == 0):
@@ -66,8 +60,7 @@ class Robot(Drawable):
         elif(self.direction == 270):
             self.front = [self.x, self.y - self.radius]
             self.direction = 0
-        self.sensorPack.update(self.front, self.direction)
-    
+
     def right(self):
         if(self.direction == 0):
             self.front = [self.x + self.radius, self.y]
@@ -79,9 +72,8 @@ class Robot(Drawable):
             self.front = [self.x - self.radius, self.y]
             self.direction = 90
         elif(self.direction == 90):
-            self.front = [self.x, self.y - self.radius]6
+            self.front = [self.x, self.y - self.radius]
             self.direction = 0
-        self.sensorPack.update(self.front, self.direction)
     
     def checkCollision(self):
         for wall in self.walls:
@@ -93,13 +85,12 @@ class Robot(Drawable):
         """draws robot  as a circle"""
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
         self.sensorPack.draw(screen)
-    
-    
-
-
+        
+        
+        
 """-----------------------------SensorPack--------------------------------"""
 
-class SensorPack(Drawable):
+class SensorPack(abstractClass.Drawable):
 
     def __init__(self,position,direction,lightSource,wall):
         super(SensorPack,self).__init__(position,[5,None],[50,0,50])
@@ -129,7 +120,7 @@ class SensorPack(Drawable):
        
 
 
-class IRSensor(Sensor):
+class IRSensor(abstractClass.Sensor):
     def __init__(self, lightSource):
         """
         constructor for IRSensor class
@@ -167,7 +158,7 @@ class IRSensor(Sensor):
            
            
 
-class UltraSonicSensor(Sensor):
+class UltraSonicSensor(abstractClass.Sensor):
     def __init__(self, walls):
         """
         constructor for UltraSonicSensor class
@@ -219,13 +210,6 @@ class UltraSonicSensor(Sensor):
         elif(len(wallsInFront) == 1):
             wallToUse = wallsInFront[0]
         
-        #value to return
-        #assert(wallToUse),"UltraSonic: No wall chosen"
-        print " " 
-        print wallToUse
-        print position
-        print direction
-        
         distance = self.distanceToWall(wallToUse,position,direction) #distance to wallToUse
         assert(distance),"UltraSonic: No distance returned"
         if(distance > 300):
@@ -247,60 +231,3 @@ class UltraSonicSensor(Sensor):
             return wall.y - y
         if(direction == 270):
             return wall.x - x 
-  
-
-"""----------------------------World Elements-----------------------------"""
-     
-class LEDRing(Drawable):
-    """provides a light source in the world: includes a constructor and an intensity(distance) evaluator"""
-    def __init__(self, position,radius=10,color=(0,255,255)):
-        """
-        constructor for LED class
-        ATTRIBUTES: "position", (x,y) coordinates of center of LED
-                    radius, radius of LED
-                    color, RGB of LED, defaults as cyan
-        """
-        super(LEDRing,self).__init__(position,[radius,None],color)
-        self.range = 300
-        
-    def intensity(self, measurePosition):
-        deltax = measurePosition[0]-self.x
-        deltay = measurePosition[1]-self.y
-        distance = (deltax**2+deltay**2)**.5
-        distanceReverseMap = self.range - distance
-        if(distanceReverseMap < 0):
-            distanceReverseMap = 0
-        norm = distanceReverseMap/self.range
-        return norm
-        
-    def draw(self,screen):
-        """draws LED ring  as a circle"""
-        pygame.draw.circle(screen, self.color, (self.x, self.y), int(0.8*self.range),1)
-        pygame.draw.circle(screen, self.color, (self.x, self.y), int(0.3*self.range),3)
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
-        
-    
-class Wall(Drawable):
-    """provides a walls in the world: includes a constructor and a collision evaluator"""
-    def __init__(self,position, dimensions, color=(0,0,0)):
-        """
-        constructor for Wall class
-        ATTRIBUTES: "position", (x,y) coordinates of upper lefthand corner of wall
-                    "dimensions", (x,y) length of wall
-                    color, RGB of wall, defaults as black
-        """
-        super(Wall,self).__init__(position,dimensions,color)
-
-    def betweenX(self, x):
-        return (self.x <= x) and (x <= self.x + self.width)
-    
-    def betweenY(self, y):
-        return (self.y <= y) and (y <= self.y + self.height)
-        
-    def draw(self,screen):
-        """draws wall as a rectangle"""
-        rectangle = pygame.Rect(self.x,self.y,self.width,self.height)
-        pygame.draw.rect(screen, self.color, rectangle)
-        
-
- 
