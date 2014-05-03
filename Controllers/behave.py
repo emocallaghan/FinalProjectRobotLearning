@@ -90,15 +90,15 @@ class Situation:
     def ishappy(self,sensors):
         """ 
         denotes one of four results of action
-        this will never chaHappinessGraphernge per situation as the sensor values
+        this will never change per situation as the sensor values
         determine the call of this scenario
         """        
         happinesses = {(2,0): 2,
                        (1,0): 1,
                        (0,0): 0,
-                       (2,1): 0,
-                       (1,1):-1,
-                       (0,1):-2}                     
+                       (2,1):-1,
+                       (1,1):-2,
+                       (0,1):-3}                     
         self.happiness = happinesses[sensors]    # WHAT IF NONE RETURNED
         
             
@@ -106,7 +106,7 @@ class Situation:
         if self.lastact != None:            
             if self.happiness == past: #WHAT IF PAST MOST/LEAST HAPPY
                 if past == -2:
-                    self.actions[self.lastact] -= 1
+                    self.actions[self.lastact] -= 2
                 elif past == 2:
                     self.actions[self.lastact] += 1
                 else:
@@ -114,7 +114,7 @@ class Situation:
             elif self.happiness > past:
                 self.actions[self.lastact] += 1
             elif self.happiness < past:
-                self.actions[self.lastact] -= 1
+                self.actions[self.lastact] -= 2
             else:
                 print "Dafuk?"
                 

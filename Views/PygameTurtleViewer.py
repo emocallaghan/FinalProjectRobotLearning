@@ -40,45 +40,47 @@ class HappinessGrapher:
         self.happinessMem.append(happy)
         
     def happyGraph(self):
-        print len(self.happinessMem)
         size = self.screen.get_size()
         
         padding = 50
-        barWidth = 50.0
+        barWidth = 3.0
         
         graphsize = (size[0]-2*padding,size[1]-2*padding)
         num_bars = int(graphsize[0]/barWidth)
         bar_sample_size = int(len(self.happinessMem)/num_bars) 
-        print "# of samples per bar = ", 
-        print bar_sample_size
         miniList = []
         for mini in range(0,len(self.happinessMem)-bar_sample_size, bar_sample_size):
             sumBar = 0
-            print "mini = ",
-            print mini
             for barVal in range(0, bar_sample_size-1):
                 sumBar += self.happinessMem[mini+barVal]
-            sumBar = sumBar
+            sumBar = float(sumBar)/bar_sample_size
             miniList.append(sumBar)
             
-        graph = pygame.Surface(graphsize) 
-        graph.fill((50,0,50,255))
-        high = max(miniList)
-        low = min(miniList)
+        graphPlus  = pygame.Surface((graphsize[0],int(graphsize[1]/2))) 
+        graphMinus = pygame.Surface((graphsize[0],int(graphsize[1]/2)))
+        
+        graphPlus.fill((50,0,50,255))
+        graphMinus.fill((50,0,50,255))
+        
+        mag = max([abs(x) for x in miniList])
+        norm = [ int( (float(x)/float(mag))*(graphsize[1]/2) ) for x in miniList]
         
         for bar in range(len(miniList)):
-            normBar = (miniList[bar]+ abs(low)) / (high+abs(low))
-            scaledBar = int(normBar*graphsize[1])
-            print ""
-            print bar
-            print graphsize[0]*bar,
-            print graphsize[1] - scaledBar,
-            print int(barWidth),
-            print scaledBar
-            pygame.draw.rect(graph, (0,255,255,255),(graphsize[0]*bar,graphsize[1] - scaledBar,int(barWidth),scaledBar) )
-        
-        self.screen.fill((0,0,0,255))
-        self.screen.blit(graph, (padding,padding)) 
+            x = barWidth*bar
+            width = int(barWidth)
+            height = abs(norm[bar])
+            if norm[bar] > 0:        
+                y = int(graphsize[1]/2) - norm[bar]
+                pygame.draw.rect( graphPlus, (0,255,255,255),(x,y,width,height) )
+            elif norm[bar] < 0:
+                y = 0
+                pygame.draw.rect( graphMinus, (200,0,0,200),(x,y,width,height) )
+            else:
+                pass
+            
+        self.screen.fill((50,0,50,255))
+        self.screen.blit(graphPlus, (padding,padding)) 
+        self.screen.blit(graphMinus,(padding,padding + int(graphsize[1]/2)))
         
         pygame.display.update()   
                 

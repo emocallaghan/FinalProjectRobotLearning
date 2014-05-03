@@ -15,64 +15,84 @@ from Views import PygameTurtleViewer
 #Somewhere here or in the above DATA should be imported
 
         
-""" """ """ """ """ """ """ """ """ """ """ """ """ """ """
+""" """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """
 Running Code
-""" """ """ """ """ """ """ """ """ """ """ """ """ """ """
+""" """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """
             
 if __name__ == '__main__':
+    #THIS IS PYGAME!!! not sparta
     pygame.init()
 
+    """__________Initiates Class Objects and Umbrella Variables___________"""
+
+    #Creates display surface
     size = (400,600)
     screen = pygame.display.set_mode(size)
     
+    #Virtual World and Active
     model = VirtualWorld3.Model(size)
     controller = behave.Controller()
-#    data = 
-    
+   
+    #Creates objects to see and modify virtual world
     view = PygameTurtleViewer.View(model,screen)
     editor = EditTurtleWorld.WorldEditor(model,screen)
 
+    #denote if pygame screen should be visible
     running = True
     
-#    inizalize first sent of data
-    sensed = model.robot.sensorPack.getSensorData() #<---depth 1, reaction only
+    #Creates storage for subsystem transfers
+    sensed = model.robot.sensorPack.getSensorData() 
     action = None
+    
+    """____________Turtle Explores and Learns the Consequences____________"""
     
     while running:
         for event in pygame.event.get():
+            #End of World Conditions
             if event.type == QUIT:
                 running = False
             if event.type == KEYUP and event.key == pygame.K_ESCAPE:
                 running = False
             editor.update(event)
         """
-        the view of hte model is updated for our viewing pleasure
+        The window to paradise is fluid, allowing us to bear it witness
         """        
         view.draw()
         """
-        instead of having thecontroller own the model, it is given some of 
-        the model data to work with
+        No one owns the world; they can but precieve some small subreality, 
         """
         action,happy = controller.update(sensed)
         """
-        in turn, the model is informed of the choice made
+        yet the world must have changed by your choice, little devil
         """
         sensed = model.update(action)
-
+        """
+        Happy, sad, or full of pride: Bury that feeling in memory
+        """
         view.happyGrapher.addHappiness(happy)
+        
+        # Print to terminal/spider window  
         print happy
         print action
-        time.sleep(.05)
+
+        # Slow down, and enjoy the moment
+        time.sleep(.03)
         
+        
+    """_________________Pleasure and Pain for All to See__________________"""
+    
     running = True
+    
+    #Analyze happiness record and graph behavior
     view.happyGrapher.happyGraph()
+    
+    #Display Graph until End of World
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
             if event.type == KEYUP and event.key == pygame.K_ESCAPE:
                 running = False
-        time.sleep(.01)
     
     
-    pygame.quit()
+    pygame.quit() #You don't have to go home but you can't stay here
