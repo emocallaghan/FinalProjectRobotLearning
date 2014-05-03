@@ -20,6 +20,7 @@ class Model:
         
         self.createWorldMap(boundarySize)
         self.robot = Robot.Robot(self.myWalls,self.light)
+        self.preWall = None
 
     def createWorldMap(self, boundarySize):
         """
@@ -31,14 +32,17 @@ class Model:
         height = boundarySize[1]
         thickness = 20 #depth of border walls
                 
-        self.myWalls.append( Elements.Wall([thickness,0], [width-2*thickness,thickness])) #Ceiling
-        self.myWalls.append( Elements.Wall([thickness,height-thickness], [width-2*thickness,thickness])) #Floor
-        self.myWalls.append( Elements.Wall([width-thickness,thickness],[thickness,height-2*thickness])) #Right
-        self.myWalls.append( Elements.Wall([0,thickness],[thickness,height-2*thickness])) #Left
+        self.myWalls.append( Elements.Wall([0,0], [width-thickness,thickness])) #Ceiling
+        self.myWalls.append( Elements.Wall([thickness,height-thickness], [width-thickness,thickness])) #Floor
+        self.myWalls.append( Elements.Wall([width-thickness,0],[thickness,height-thickness])) #Right
+        self.myWalls.append( Elements.Wall([0,thickness],[thickness,height-thickness])) #Left
 
         #Create World Obstacles
     def createWalls(self,position, dimensions):       
         self.myWalls.append( Elements.Wall(position, dimensions) )
+        
+    def createPreWall(self,position,dimensions):
+        self.preWall =  Elements.Wall(position, dimensions,(200,0,0,200))
         
     def update(self, action):
         self.robot.update(action)

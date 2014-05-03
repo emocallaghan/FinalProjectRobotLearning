@@ -24,8 +24,12 @@ class Drawable(object):
         self.x = position[0]
         self.y = position[1]
         
-        assert(len(color) == 3),"Drawable Object Color not defined in RGB"
-        self.color = pygame.Color(color[0],color[1],color[2])
+        
+        assert(len(color) == 3 or len(color) == 4),"Drawable Object Color not defined in RGB or RGBa"
+        if len(color) == 3:
+            self.color = pygame.Color(color[0],color[1],color[2])
+        else:
+            self.color = color
         
         assert(len(dimensions) == 2),"Drawable Object Size not defined in 2D"
         if dimensions[0] and dimensions[1] == None:

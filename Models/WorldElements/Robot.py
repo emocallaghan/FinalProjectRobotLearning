@@ -12,7 +12,7 @@ from Abstract import abstractClass
 
 class Robot(abstractClass.Drawable):
     def __init__(self, walls, lightSource):
-        super(Robot,self).__init__([600,400],[40,None],[170,50,255])
+        super(Robot,self).__init__([100,100],[40,None],[170,50,255,255])
         self.front = [self.x,self.y-self.radius]
         self.direction = 0 #degrees
         self.sensorPack = SensorPack(self.front,self.direction,lightSource,walls)
@@ -92,11 +92,11 @@ class Robot(abstractClass.Drawable):
 
 class SensorPack(abstractClass.Drawable):
 
-    def __init__(self,position,direction,lightSource,wall):
+    def __init__(self,position,direction,lightSource,wall,):
         super(SensorPack,self).__init__(position,[5,None],[50,0,50])
         self.direction = direction
         self.irSensor = IRSensor(lightSource)
-        self.ultrasonicSensor = UltraSonicSensor(wall)
+        self.ultrasonicSensor = UltraSonicSensor(wall,lightSource)
         self.touchSensor = True
     def getSensorData(self):
         sensorData = []
@@ -150,7 +150,7 @@ class IRSensor(abstractClass.Sensor):
             if(x < self.lightSource.x):
                 hasData = True
         
-        #returns intensity if sensor is pointing "toward" light, else returns zero
+        #returns intensity if seBehaviorControl as nsor is pointing "toward" light, else returns zero
         if(hasData):
             return self.lightSource.intensity(position)
         else:
@@ -159,7 +159,7 @@ class IRSensor(abstractClass.Sensor):
            
 
 class UltraSonicSensor(abstractClass.Sensor):
-    def __init__(self, walls):
+    def __init__(self, walls,light):
         """
         constructor for UltraSonicSensor class
         ATTRIBUTES: walls, list of wall instances in model
@@ -170,11 +170,11 @@ class UltraSonicSensor(abstractClass.Sensor):
     
     def getData(self, position, direction):
         """Determines intensity of light IR sensor is receiving"""
-        depth = 5 
         x = position[0] 
         y = position[1] 
         wallsInFront = [] 
         wallToUse = None 
+        sight = 55.0
         
         #finds all walls in front of turtle
         for wall in self.walls:
@@ -187,6 +187,7 @@ class UltraSonicSensor(abstractClass.Sensor):
             if(direction == 270 and x < wall.x):
                 wallsInFront.append(wall)
                 
+     
         #if no walls in front
         #assumedly this will never happen if the world is properly bounded by walls
         if(len(wallsInFront) == 0):
@@ -212,10 +213,10 @@ class UltraSonicSensor(abstractClass.Sensor):
         
         distance = self.distanceToWall(wallToUse,position,direction) #distance to wallToUse
         assert(distance),"UltraSonic: No distance returned"
-        if(distance > 300):
-            distance = 300 #greatest noticable distance
+        if(distance > sight):
+            distance = sight #greatest noticable distance
         
-        norm = distance/300.0 #normalized distance
+        norm = distance/sight #normalized distance
         return norm
             
     def distanceToWall(self, wall,position,direction):

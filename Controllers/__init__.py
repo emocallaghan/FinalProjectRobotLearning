@@ -5,6 +5,7 @@ Created on Wed Apr 30 12:28:27 2014
 @author: cbeeryT
 """
 
-import behave, EditTurtleWorld
+import behave
+import EditTurtleWorld
 
 __all__ = ['behave','EditTurtleWorld']
