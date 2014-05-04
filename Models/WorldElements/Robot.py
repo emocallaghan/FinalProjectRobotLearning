@@ -98,8 +98,8 @@ class SensorPack(abstractClass.Drawable):
     def __init__(self,position,direction,lightSource,wall,):
         super(SensorPack,self).__init__(position,[5,None],[50,0,50])
         self.direction = direction
-        self.irSensor = IRSensor(lightSource)
         self.ultrasonicSensor = UltraSonicSensor(wall,lightSource)
+        self.irSensor = IRSensor(lightSource, self.ultrasonicSensor)
         self.touchSensor = True
     def getSensorData(self):
         sensorData = []
@@ -124,7 +124,7 @@ class SensorPack(abstractClass.Drawable):
 
 
 class IRSensor(abstractClass.Sensor):
-    def __init__(self, lightSource):
+    def __init__(self, lightSource, UltraSonicSensor):
         """
         constructor for IRSensor class
         ATTRIBUTES: lightSource, instance of LEDRing
@@ -132,6 +132,7 @@ class IRSensor(abstractClass.Sensor):
         assumes one lightSource
         """
         self.lightSource = lightSource
+        self.UltraSonicSensor = UltraSonicSensor
         
     def getData(self,position,direction):
         """Determines intensity of light IR sensor is receiving"""
@@ -141,23 +142,40 @@ class IRSensor(abstractClass.Sensor):
         
         # Determines if sensor pointing in a useful direction
         if(direction == 0):
-            if(y > self.lightSource.y) and UltraSonicSensor.distanceToWall > abs(y-self.lightSource.y):
-                hasData = True
+            if(y > self.lightSource.y and self.correctOther(self.lightSource.x, x)):
+                print "LIZZY FUCKED IT FUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCK"
+                if(self.UltraSonicSensor.getData(position,direction) > abs(y-self.lightSource.y)):
+                    print "And Now I See the Light fuck"                
+                    hasData = True 
         elif(direction == 90): 
-            if(x > self.lightSource.x) and UltraSonicSensor.distanceToWall > abs(x-self.lightSource.x):
-                hasData = True
+            if(x > self.lightSource.x and self.correctOther(self.lightSource.y, y)):
+                print "Lizzy fucked it. bitch"
+                if(self.UltraSonicSensor.getData(position, direction) > abs(x-self.lightSource.x)):
+                    print "And Now I See the Light bitch"                
+                    hasData = True
         elif(direction == 180):
-            if(y < self.lightSource.y) and UltraSonicSensor.distanceToWall > abs(y-self.lightSource.y):
-                hasData = True
+            if(y < self.lightSource.y and self.correctOther(self.lightSource.x, x)):
+                print "Lizzy fucked it. twat"
+                if(self.UltraSonicSensor.getData(position, direction) > abs(y-self.lightSource.y)):
+                    print "And Now I See the Light twat"
+                    hasData = True
         elif(direction == 270):
-            if(x < self.lightSource.x) and UltraSonicSensor.distanceToWall > abs(x-self.lightSource.x):
-                hasData = True
+            if(x < self.lightSource.x and self.correctOther(self.lightSource.y, y)):
+                print "Lizzy fucked it. dick"
+                if(self.UltraSonicSensor.getData(position, direction) > abs(x-self.lightSource.x)):
+                    print "And Now I See the Light dick"
+                    hasData = True
         
         #returns intensity if seBehaviorControl as nsor is pointing "toward" light, else returns zero
         if(hasData):
             return self.lightSource.intensity(position)
         else:
             return 0
+        
+        def correctOther(self, lightSourceDir, robotDir):
+            if((lightSourceDir - self.lightSource.oCR < robotDir) and (robotDir < lightSourceDir + self.lightSource.oCr )):
+                return True
+            return False
            
            
 

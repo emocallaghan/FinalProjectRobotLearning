@@ -20,6 +20,7 @@ class LEDRing(abstractClass.Drawable):
         """
         super(LEDRing,self).__init__(position,[radius,None],color)
         self.range = 300
+        self.oCR = int(0.8*self.range)
         
     def intensity(self, measurePosition):
         deltax = measurePosition[0]-self.x
@@ -35,13 +36,12 @@ class LEDRing(abstractClass.Drawable):
         """draws LED ring  as a circle"""
         
         #outer circle
-        oCR = int(0.8*self.range)
-        outerCircle = pygame.Surface((oCR*2,oCR*2))
-        pygame.draw.circle(outerCircle, self.color, (oCR, oCR), oCR)
+        outerCircle = pygame.Surface((self.oCR*2,oCR*2))
+        pygame.draw.circle(outerCircle, self.color, (self.oCR, self.oCR), self.oCR)
         outerCircle.set_colorkey((0,0,0))
         assert(len(self.color) == 4),"no alpha value for light"
         outerCircle.set_alpha(self.color[3])                        
-        screen.blit(outerCircle, (self.x-oCR,self.y-oCR)) 
+        screen.blit(outerCircle, (self.x-self.oCR,self.y-self.oCR)) 
         
         #innercircle
         iCR = int(0.3*self.range)
