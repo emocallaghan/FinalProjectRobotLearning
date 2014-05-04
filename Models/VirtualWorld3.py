@@ -15,7 +15,7 @@ class Model:
     def __init__(self, boundarySize,graphSize):
         """ contructor for the WorldModel class"""
         
-        self.light = Elements.LEDRing([200,200]) #off screen for testing wall avoidance
+        self.light = Elements.LEDRing([2000,2000]) #off screen for testing wall avoidance
         self.myWalls = []
         
         self.createWorldMap(boundarySize,graphSize)

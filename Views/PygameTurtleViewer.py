@@ -47,18 +47,21 @@ class HappinessGrapher:
     def movingGraph(self):
         self.tempMem.insert(0, self.happinessMem[-1])
         del self.tempMem[-1]        
-
+        base = self.screen.get_height()-50
         for happy in range(len(self.tempMem)):
-            
+            height = abs(self.tempMem[happy]) * 13 
             if self.tempMem[happy] > 0:
                 color = (0,255,255,255)
+                pygame.draw.line(self.screen, color, (happy, base-height*2),(happy, base), 2) 
             elif self.tempMem[happy] < 0:
-                color = (200,0,0,200)        
+                color = (200,0,0,200) 
+                pygame.draw.line(self.screen, color, (happy, base+height),(happy, base), 2) 
             else:
                 color = (50,0,50,255)
+                pygame.draw.circle(self.screen, color, (happy, base), 3, 2) 
                 
-            height = (self.tempMem[happy]+3) * 10 
-            pygame.draw.circle(self.screen, color, (happy, self.screen.get_height()-height-30), 7, 2)    
+           
+               
         
     
     def happyGraph(self):

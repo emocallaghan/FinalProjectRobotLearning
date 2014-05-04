@@ -73,16 +73,17 @@ class Controller:
         if self.lastabstract  != None:
 
             if self.lastabstract is self.situations[2]:
-                    print sensors
-                    print self.pasthappy  
-                    print self.lastabstract.actions
-                    print self.lastabstract.lastact                  
-                    print self.lastabstract.happiness   
+                print sensors
+                print self.pasthappy  
+                print self.lastabstract.actions
+                print self.lastabstract.lastact                  
                     
-            self.pasthappy = self.lastabstract.update(self.pasthappy,(sensors[0],sensors[1]))#update last try
+            self.pasthappy = self.lastabstract.update((sensors[0],sensors[1]))#update last try
             
             if self.lastabstract is self.situations[2]:
-                    print self.lastabstract.actions
+                print self.lastabstract.ishappy((sensors[0],sensors[1]))
+                print self.pasthappy 
+                print self.lastabstract.actions
             
         #choose new try    
         self.lastabstract = self.situations[self.abstract.index(sensors)] 
@@ -97,15 +98,15 @@ class Controller:
 
 class Situation:
     def __init__(self,sensors):
-        self.actions = {'fwd':10, 'left':3, 'right': 3}
+        self.actions = {'fwd':50, 'left':3, 'right': 3}
         self.lastact = None
-        self.happiness = None
-        self.ishappy(sensors)
+        self.happiness = self.ishappy(sensors)
+        
             
     def act(self):
         temp = self.actions.copy()
         for act in temp:
-            temp[act] = temp[act]*randint(1,3) 
+            temp[act] = temp[act]*randint(1,20) 
         self.lastact = max(temp,key=temp.get)
 #        print self.lastact
         return self.lastact # WHAT IF NONE RETURNED
@@ -122,27 +123,28 @@ class Situation:
                        (2,1):-1,
                        (1,1):-2,
                        (0,1):-3}                     
-        self.happiness = happinesses[sensors]    # WHAT IF NONE RETURNED
+        return happinesses[sensors]    # WHAT IF NONE RETURNED
         
             
-    def update(self,past,(pleasure,pain)):  
-        
-        if self.lastact != None:            
-            if self.happiness == past: #WHAT IF PAST MOST/LEAST HAPPY
-                if past == -3:
-                    self.actions[self.lastact] += -1
-                elif past == 2:
-                    self.actions[self.lastact] += 1
+    def update(self,sensors):  
+        current = self.ishappy(sensors)
+        if self.lastact != None:  
+            
+            if self.happiness == current: #WHAT IF PAST MOST/LEAST HAPPY
+                if current == -3:
+                    self.actions[self.lastact] += -2
+                elif current == 2:
+                    self.actions[self.lastact] += 2
                 else:
-                    pass
-            elif self.happiness > past:
-                self.actions[self.lastact] += 1
-            elif self.happiness < past:
-                self.actions[self.lastact] += -1
+                    self.actions[self.lastact] -= 1
+            elif self.happiness > current:
+                self.actions[self.lastact] += -2
+            elif self.happiness < current:
+                self.actions[self.lastact] +=  2
             else:
                 print "Dafuk?"
                 
-        return self.happiness
+        return current
 
         
         

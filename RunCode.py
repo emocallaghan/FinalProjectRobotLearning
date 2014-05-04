@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     #Creates display surface
     graphSize = 120
-    size = (1000,700 - graphSize)
+    size = (1500,800)
     screen = pygame.display.set_mode(size) 
     
     #Virtual World and Active
