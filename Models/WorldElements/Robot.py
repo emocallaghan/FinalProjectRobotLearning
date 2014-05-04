@@ -181,6 +181,7 @@ class UltraSonicSensor(abstractClass.Sensor):
         
         #finds all walls in front of turtle
         for wall in self.walls:
+            wall.color = (0,0,0,255)
             if(direction == 0 and y > wall.y):
                 wallsInFront.append(wall)
             if(direction == 90 and x > wall.x):
@@ -201,14 +202,20 @@ class UltraSonicSensor(abstractClass.Sensor):
             #compares to last closest wall
             closestWall = wallsInFront[0]
             for wall in wallsInFront:
+                wall.color = (0,255,255,255)
                 if(direction == 0 and wall.y > closestWall.y+1):
                     closestWall = wall
+                    
                 elif(direction == 90 and wall.x > closestWall.x+1):
                     closestWall = wall
+                    
                 elif(direction == 180 and wall.y < closestWall.y):
                     closestWall = wall
+                    
                 elif(direction == 270 and wall.x < closestWall.x):
                     closestWall = wall
+
+            closestWall.color = (0,255,0,255)   
             wallToUse = closestWall
         #if only one wall
         elif(len(wallsInFront) == 1):
@@ -226,10 +233,19 @@ class UltraSonicSensor(abstractClass.Sensor):
         """ Finds Distance to wall """
         x = position[0]
         y = position[1]
-        
         if(direction == 0):
+            print '0'
+            print y
+            print wall.y + wall.height+1
+            print y - (wall.y + wall.height+1)
+            print 'YOU THINK THIS IS A GAME?!?!?!?!?!?!'
             return y - (wall.y + wall.height+1)
         if(direction == 90):
+            print '90'
+            print x
+            print wall.x + wall.width+1
+            print x - (wall.x + wall.width+1)
+            print 'Ehhhhh sexy lady ;)'
             return x - (wall.x + wall.width+1)
         if(direction == 180):
             return wall.y - y
