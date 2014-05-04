@@ -69,17 +69,17 @@ class Controller:
         
         if self.lastabstract  != None:
 
-            if self.lastabstract is self.situations[8]:
-                    print ""
-                    print self.pasthappy  
-                    print self.lastabstract.happiness
-                    print self.lastabstract.actions
-                    print self.lastabstract.lastact
+#            if self.lastabstract is self.situations[8]:
+ #                   print ""
+ #                   print self.pasthappy  
+#                    print self.lastabstract.happiness
+#                    print self.lastabstract.actions
+#                    print self.lastabstract.lastact
             
             self.pasthappy = self.lastabstract.update(self.pasthappy,(sensors[0],sensors[1]))#update last try
             
-            if self.lastabstract is self.situations[8]:
-                    print self.lastabstract.actions
+#            if self.lastabstract is self.situations[8]:
+#                    print self.lastabstract.actions
             
         #choose new try    
         self.lastabstract = self.situations[self.abstract.index(sensors)] 
@@ -122,7 +122,7 @@ class Situation:
         
         if self.lastact != None:            
             if self.happiness == past: #WHAT IF PAST MOST/LEAST HAPPY
-                if past == -2:
+                if past == -3:
                     self.actions[self.lastact] += -1
                 elif past == 2:
                     self.actions[self.lastact] += 1
