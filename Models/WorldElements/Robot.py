@@ -20,7 +20,7 @@ class Robot(abstractClass.Drawable):
     
     def update(self, action):
         if (action == 'fwd'):
-            for i in range(10):
+            for i in range(9):
                 if(self.checkCollision()):
                     break
                 self.fwd()
@@ -177,7 +177,7 @@ class UltraSonicSensor(abstractClass.Sensor):
         y = position[1] 
         wallsInFront = [] 
         wallToUse = None 
-        sight = 51.0
+        sight = 50.0
         
         #finds all walls in front of turtle
         for wall in self.walls:
