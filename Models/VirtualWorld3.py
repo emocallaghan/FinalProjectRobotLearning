@@ -15,7 +15,7 @@ class Model:
     def __init__(self, boundarySize):
         """ contructor for the WorldModel class"""
         
-        self.light = Elements.LEDRing([400,400]) #assumes not placed within 50v pixels of World's Edge
+        self.light = Elements.LEDRing([1000,1000]) #off screen for testing wall avoidance
         self.myWalls = []
         
         self.createWorldMap(boundarySize)

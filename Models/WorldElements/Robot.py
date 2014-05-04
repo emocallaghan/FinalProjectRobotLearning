@@ -20,7 +20,7 @@ class Robot(abstractClass.Drawable):
     
     def update(self, action):
         if (action == 'fwd'):
-            for i in range(20):
+            for i in range(9):
                 if(self.checkCollision()):
                     break
                 self.fwd()

@@ -64,12 +64,28 @@ class Controller:
         
 #        print ""
 #        print sensors
-        sensors = self.clean(sensors[0],sensors[1],sensors[2])  
-        if self.lastabstract  != None:                             
+        sensors = self.clean(sensors[0],sensors[1],sensors[2]) 
+#        print sensors
+        
+        if self.lastabstract  != None:
+
+            if self.lastabstract is self.situations[8]:
+                    print ""
+                    print self.pasthappy  
+                    print self.lastabstract.happiness
+                    print self.lastabstract.actions
+                    print self.lastabstract.lastact
+            
             self.pasthappy = self.lastabstract.update(self.pasthappy,(sensors[0],sensors[1]))#update last try
-        self.lastabstract = self.situations[self.abstract.index(sensors)] #choose new try
-#        print self.abstract.index(sensors)
-        return self.lastabstract.act(),self.pasthappy                                                  #act on new try
+            
+            if self.lastabstract is self.situations[8]:
+                    print self.lastabstract.actions
+            
+        #choose new try    
+        self.lastabstract = self.situations[self.abstract.index(sensors)] 
+        
+        #act on new try        
+        return self.lastabstract.act(),self.pasthappy   
 
 
 class Situation:
@@ -103,10 +119,11 @@ class Situation:
         
             
     def update(self,past,(pleasure,pain)):  
+        
         if self.lastact != None:            
             if self.happiness == past: #WHAT IF PAST MOST/LEAST HAPPY
                 if past == -2:
-                    self.actions[self.lastact] -= 2
+                    self.actions[self.lastact] += -1
                 elif past == 2:
                     self.actions[self.lastact] += 1
                 else:
@@ -114,7 +131,7 @@ class Situation:
             elif self.happiness > past:
                 self.actions[self.lastact] += 1
             elif self.happiness < past:
-                self.actions[self.lastact] -= 2
+                self.actions[self.lastact] += -1
             else:
                 print "Dafuk?"
                 

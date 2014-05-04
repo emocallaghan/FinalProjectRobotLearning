@@ -72,11 +72,11 @@ if __name__ == '__main__':
         view.happyGrapher.addHappiness(happy)
         
         # Print to terminal/spider window  
-        print happy
-        print action
+#        print happy
+#        print action
 
         # Slow down, and enjoy the moment
-        time.sleep(.03)
+        time.sleep(.01)
         
         
     """_________________Pleasure and Pain for All to See__________________"""
