@@ -183,13 +183,17 @@ class UltraSonicSensor(abstractClass.Sensor):
         for wall in self.walls:
             wall.color = (0,0,0,255)
             if(direction == 0 and y > wall.y):
-                wallsInFront.append(wall)
+                if(wall.x < x and x < wall.x + wall.width):
+                    wallsInFront.append(wall)
             if(direction == 90 and x > wall.x):
-                wallsInFront.append(wall)
+                if(wall.y < y and y < wall.y + wall.height):
+                    wallsInFront.append(wall)
             if(direction == 180 and y < wall.y):
-                wallsInFront.append(wall)
+                if(wall.x < x and x < wall.x + wall.width):
+                    wallsInFront.append(wall)
             if(direction == 270 and x < wall.x):
-                wallsInFront.append(wall)
+                if(wall.y < y and y < wall.y + wall.height):
+                    wallsInFront.append(wall)
                 
      
         #if no walls in front
@@ -215,14 +219,16 @@ class UltraSonicSensor(abstractClass.Sensor):
                 elif(direction == 270 and wall.x < closestWall.x):
                     closestWall = wall
 
-            closestWall.color = (0,255,0,255)   
+              
             wallToUse = closestWall
         #if only one wall
         elif(len(wallsInFront) == 1):
             wallToUse = wallsInFront[0]
+        wallToUse.color = (0,255,0,255) 
         
         distance = self.distanceToWall(wallToUse,position,direction) #distance to wallToUse
-        assert(distance),"UltraSonic: No distance returned"
+
+        assert(distance != None),"UltraSonic: No distance returned"
         if(distance > sight):
             distance = sight #greatest noticable distance
         
@@ -234,20 +240,22 @@ class UltraSonicSensor(abstractClass.Sensor):
         x = position[0]
         y = position[1]
         if(direction == 0):
-            print '0'
-            print y
-            print wall.y + wall.height+1
-            print y - (wall.y + wall.height+1)
-            print 'YOU THINK THIS IS A GAME?!?!?!?!?!?!'
-            return y - (wall.y + wall.height+1)
+            if(y - (wall.y+wall.height)<5):
+                print 'YOU THINK THIS IS A GAME?!?!?!?!?!?!'
+                print y - (wall.y+wall.height)
+            return y - (wall.y + wall.height)
         if(direction == 90):
-            print '90'
-            print x
-            print wall.x + wall.width+1
-            print x - (wall.x + wall.width+1)
-            print 'Ehhhhh sexy lady ;)'
-            return x - (wall.x + wall.width+1)
+            if(x - (wall.x + wall.width+1) < 5):
+                print 'Ehhhhh sexy lady ;)'
+                print x - (wall.x + wall.width)
+            return x - (wall.x + wall.width)
         if(direction == 180):
+            if((wall.y - y)<5):
+                print 'COCAINE!!!!!!! FUCKERS'
+                print wall.y - y
             return wall.y - y
         if(direction == 270):
+            if((wall.x-x) < 5):
+                print 'BEAT IT CLAIRE BEAT IT'
+                print wall.x - x
             return wall.x - x 
