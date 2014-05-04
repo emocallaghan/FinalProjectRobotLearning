@@ -36,7 +36,7 @@ class LEDRing(abstractClass.Drawable):
         """draws LED ring  as a circle"""
         
         #outer circle
-        outerCircle = pygame.Surface((self.oCR*2,oCR*2))
+        outerCircle = pygame.Surface((self.oCR*2,self.oCR*2))
         pygame.draw.circle(outerCircle, self.color, (self.oCR, self.oCR), self.oCR)
         outerCircle.set_colorkey((0,0,0))
         assert(len(self.color) == 4),"no alpha value for light"

@@ -172,10 +172,10 @@ class IRSensor(abstractClass.Sensor):
         else:
             return 0
         
-        def correctOther(self, lightSourceDir, robotDir):
-            if((lightSourceDir - self.lightSource.oCR < robotDir) and (robotDir < lightSourceDir + self.lightSource.oCr )):
-                return True
-            return False
+    def correctOther(self, lightSourceDir, robotDir):
+        if((lightSourceDir - self.lightSource.oCR < robotDir) and (robotDir < lightSourceDir + self.lightSource.oCr )):
+            return True
+        return False
            
            
 

@@ -61,10 +61,10 @@ class Controller:
         return (ir,touch, ultra)
         
     def update(self,sensors):
-        if self.lastabstract  != None:
+#        if self.lastabstract  != None:
 
-            if self.lastabstract is self.situations[2]:
-                    print sensors
+#            if self.lastabstract is self.situations[2]:
+#                    print sensors
 #        print ""
 #        print sensors
         sensors = self.clean(sensors[0],sensors[1],sensors[2]) 
@@ -72,25 +72,25 @@ class Controller:
         
         if self.lastabstract  != None:
 
-            if self.lastabstract is self.situations[2]:
-                print sensors
-                print self.pasthappy  
-                print self.lastabstract.actions
-                print self.lastabstract.lastact                  
+#            if self.lastabstract is self.situations[2]:
+#                print sensors
+#                print self.pasthappy  
+#                print self.lastabstract.actions
+#                print self.lastabstract.lastact                  
                     
             self.pasthappy = self.lastabstract.update((sensors[0],sensors[1]))#update last try
             
-            if self.lastabstract is self.situations[2]:
-                print self.lastabstract.ishappy((sensors[0],sensors[1]))
-                print self.pasthappy 
-                print self.lastabstract.actions
+#            if self.lastabstract is self.situations[2]:
+#                print self.lastabstract.ishappy((sensors[0],sensors[1]))
+#                print self.pasthappy 
+#                print self.lastabstract.actions
             
         #choose new try    
         self.lastabstract = self.situations[self.abstract.index(sensors)] 
         
-        if self.lastabstract is self.situations[2]:
-            print ""
-            print sensors
+#        if self.lastabstract is self.situations[2]:
+#            print ""
+#            print sensors
         
         #act on new try        
         return self.lastabstract.act(),self.pasthappy   
@@ -136,7 +136,7 @@ class Situation:
                 elif current == 2:
                     self.actions[self.lastact] += 2
                 else:
-                    self.actions[self.lastact] -= 1
+                    pass
             elif self.happiness > current:
                 self.actions[self.lastact] += -2
             elif self.happiness < current:
