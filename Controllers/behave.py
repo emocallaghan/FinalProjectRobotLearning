@@ -61,7 +61,10 @@ class Controller:
         return (ir,touch, ultra)
         
     def update(self,sensors):
-        
+        if self.lastabstract  != None:
+
+            if self.lastabstract is self.situations[2]:
+                    print sensors
 #        print ""
 #        print sensors
         sensors = self.clean(sensors[0],sensors[1],sensors[2]) 
@@ -69,20 +72,24 @@ class Controller:
         
         if self.lastabstract  != None:
 
-#            if self.lastabstract is self.situations[8]:
- #                   print ""
- #                   print self.pasthappy  
-#                    print self.lastabstract.happiness
-#                    print self.lastabstract.actions
-#                    print self.lastabstract.lastact
-            
+            if self.lastabstract is self.situations[2]:
+                    print sensors
+                    print self.pasthappy  
+                    print self.lastabstract.actions
+                    print self.lastabstract.lastact                  
+                    print self.lastabstract.happiness   
+                    
             self.pasthappy = self.lastabstract.update(self.pasthappy,(sensors[0],sensors[1]))#update last try
             
-#            if self.lastabstract is self.situations[8]:
-#                    print self.lastabstract.actions
+            if self.lastabstract is self.situations[2]:
+                    print self.lastabstract.actions
             
         #choose new try    
         self.lastabstract = self.situations[self.abstract.index(sensors)] 
+        
+        if self.lastabstract is self.situations[2]:
+            print ""
+            print sensors
         
         #act on new try        
         return self.lastabstract.act(),self.pasthappy   

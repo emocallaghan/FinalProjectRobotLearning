@@ -12,11 +12,12 @@ from pygame.locals import *
 """  """  """  """  """  """  """  """  """  """  """  """  """  """  """
 class View:
     """ A view of Turtle's World rendered in a Pygame window """
-    def __init__(self,model,screen):
+    def __init__(self,model,screen,graph):
         self.model = model
         self.screen = screen
-        self.happyGrapher = HappinessGrapher(screen)
-        
+        self.graph = graph
+        self.happyGrapher = HappinessGrapher(screen,graph)
+           
     def draw(self):
         """ draws all of the elements on the screen by calling draw function of model objects"""
         self.screen.fill(pygame.Color(255,255,255))
@@ -32,17 +33,33 @@ class View:
        
        
 class HappinessGrapher:
-    def __init__(self,screen):
+    def __init__(self,screen,graph):
         self.screen = screen
-        self.happinessMem = []
+        self.graph = graph
+        self.padding = 50
+        self.tempMem = [0] * self.padding
+        self.happinessMem = []       
               
     def addHappiness(self,happy):        
         self.happinessMem.append(happy)
+    
+    def movingGraph(self):
+        size = self.graph.get_size()
         
+        padding = 50
+        graphsize = (size[0]-2*padding,size[1]-2*padding)
+        
+        
+        
+        
+        
+        a.insert(0, 7)
+         
+    
     def happyGraph(self):
         size = self.screen.get_size()
         
-        padding = 50
+        padding = self.padding
         barWidth = 3.0
         
         graphsize = (size[0]-2*padding,size[1]-2*padding)
