@@ -12,24 +12,24 @@ class Model:
     Encodes the world state of It's Learning: contains a turtle, a list of 
     walls, and a light
     """
-    def __init__(self, boundarySize):
+    def __init__(self, boundarySize,graphSize):
         """ contructor for the WorldModel class"""
         
         self.light = Elements.LEDRing([200,200]) #off screen for testing wall avoidance
         self.myWalls = []
         
-        self.createWorldMap(boundarySize)
+        self.createWorldMap(boundarySize,graphSize)
         self.robot = Robot.Robot(self.myWalls,self.light)
         self.preWall = None
 
-    def createWorldMap(self, boundarySize):
+    def createWorldMap(self, boundarySize,graphSize):
         """
         Create wall borders around world, walls as obstacles denoted here
         INPUTS: boundarySize, (x,y) coordinate of lower righthand corner of screen
         """
         #Block World's Edge
         width = boundarySize[0]
-        height = boundarySize[1]
+        height = boundarySize[1]-graphSize
         thickness = 20 #depth of border walls
                 
         self.myWalls.append( Elements.Wall([0,0], [width-thickness,thickness])) #Ceiling
