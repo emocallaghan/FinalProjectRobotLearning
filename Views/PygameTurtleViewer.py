@@ -47,7 +47,6 @@ class HappinessGrapher:
     def movingGraph(self):
         self.tempMem.insert(0, self.happinessMem[-1])
         del self.tempMem[-1]        
-        boxsize = 12
 
         for happy in range(len(self.tempMem)):
             
@@ -59,7 +58,7 @@ class HappinessGrapher:
                 color = (50,0,50,255)
                 
             height = (self.tempMem[happy]+3) * 10 
-            pygame.draw.rect(self.screen, color,(happy,self.screen.get_height()- height -30,boxsize,boxsize*2) )    
+            pygame.draw.circle(self.screen, color, (happy, self.screen.get_height()-height-30), 7, 2)    
         
     
     def happyGraph(self):
