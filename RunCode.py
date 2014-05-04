@@ -23,17 +23,16 @@ if __name__ == '__main__':
     """__________Initiates Class Objects and Umbrella Variables___________"""
 
     #Creates display surface
-    Robosize = (400,600)
-    Analysize = (600,300)
-    screen = pygame.display.set_mode(Robosize)
-    analysis = pygame.display.set_mode(Analysize)
+    graphSize = 120
+    size = (1000,700 - graphSize)
+    screen = pygame.display.set_mode(size) 
     
     #Virtual World and Active
-    model = VirtualWorld3.Model(Robosize)
+    model = VirtualWorld3.Model(size,graphSize)
     controller = behave.Controller()
    
     #Creates objects to see and modify virtual world
-    view = PygameTurtleViewer.View(model,screen,analysis)
+    view = PygameTurtleViewer.View(model,screen,graphSize)
     editor = EditTurtleWorld.WorldEditor(model,screen)
 
     #denote if pygame screen should be visible

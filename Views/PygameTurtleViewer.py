@@ -12,11 +12,10 @@ from pygame.locals import *
 """  """  """  """  """  """  """  """  """  """  """  """  """  """  """
 class View:
     """ A view of Turtle's World rendered in a Pygame window """
-    def __init__(self,model,screen,graph):
+    def __init__(self,model,screen,graphSize):
         self.model = model
         self.screen = screen
-        self.graph = graph
-        self.happyGrapher = HappinessGrapher(screen,graph)
+        self.happyGrapher = HappinessGrapher(screen,graphSize)
            
     def draw(self):
         """ draws all of the elements on the screen by calling draw function of model objects"""
@@ -28,33 +27,40 @@ class View:
         
         if self.model.preWall:
             self.model.preWall.draw(self.screen)
-              
+        
+        
+        self.happyGrapher.movingGraph()
         pygame.display.update()
        
        
 class HappinessGrapher:
-    def __init__(self,screen,graph):
+    def __init__(self,screen,graphSize):
         self.screen = screen
-        self.graph = graph
+        self.graphSize = graphSize
         self.padding = 50
-        self.tempMem = [0] * self.padding
-        self.happinessMem = []       
+        self.tempMem = [0] * (self.screen.get_width())
+        self.happinessMem = [0]       
               
     def addHappiness(self,happy):        
         self.happinessMem.append(happy)
     
     def movingGraph(self):
-        size = self.graph.get_size()
+        self.tempMem.insert(0, self.happinessMem[-1])
+        del self.tempMem[-1]        
+        boxsize = 12
+
+        for happy in range(len(self.tempMem)):
+            
+            if self.tempMem[happy] > 0:
+                color = (0,255,255,255)
+            elif self.tempMem[happy] < 0:
+                color = (200,0,0,200)        
+            else:
+                color = (50,0,50,255)
+                
+            height = (self.tempMem[happy]+3) * 10 
+            pygame.draw.rect(self.screen, color,(happy,self.screen.get_height()- height -30,boxsize,boxsize*2) )    
         
-        padding = 50
-        graphsize = (size[0]-2*padding,size[1]-2*padding)
-        
-        
-        
-        
-        
-        a.insert(0, 7)
-         
     
     def happyGraph(self):
         size = self.screen.get_size()
