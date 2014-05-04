@@ -141,16 +141,16 @@ class IRSensor(abstractClass.Sensor):
         
         # Determines if sensor pointing in a useful direction
         if(direction == 0):
-            if(y > self.lightSource.y):
+            if(y > self.lightSource.y) and UltraSonicSensor.distanceToWall > abs(y-self.lightSource.y):
                 hasData = True
         elif(direction == 90): 
-            if(x > self.lightSource.x):
+            if(x > self.lightSource.x) and UltraSonicSensor.distanceToWall > abs(x-self.lightSource.x):
                 hasData = True
         elif(direction == 180):
-            if(y < self.lightSource.y):
+            if(y < self.lightSource.y) and UltraSonicSensor.distanceToWall > abs(y-self.lightSource.y):
                 hasData = True
         elif(direction == 270):
-            if(x < self.lightSource.x):
+            if(x < self.lightSource.x) and UltraSonicSensor.distanceToWall > abs(x-self.lightSource.x):
                 hasData = True
         
         #returns intensity if seBehaviorControl as nsor is pointing "toward" light, else returns zero
