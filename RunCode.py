@@ -12,9 +12,6 @@ from Models import VirtualWorld3
 from Controllers import behave, EditTurtleWorld
 from Views import PygameTurtleViewer
 
-#Somewhere here or in the above DATA should be imported
-
-        
 """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """
 Running Code
 """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """ """
@@ -26,15 +23,17 @@ if __name__ == '__main__':
     """__________Initiates Class Objects and Umbrella Variables___________"""
 
     #Creates display surface
-    size = (400,600)
-    screen = pygame.display.set_mode(size)
+    Robosize = (400,600)
+    Analysize = (600,300)
+    screen = pygame.display.set_mode(Robosize)
+    analysis = pygame.display.set_mode(Analysize)
     
     #Virtual World and Active
-    model = VirtualWorld3.Model(size)
+    model = VirtualWorld3.Model(Robosize)
     controller = behave.Controller()
    
     #Creates objects to see and modify virtual world
-    view = PygameTurtleViewer.View(model,screen)
+    view = PygameTurtleViewer.View(model,screen,analysis)
     editor = EditTurtleWorld.WorldEditor(model,screen)
 
     #denote if pygame screen should be visible

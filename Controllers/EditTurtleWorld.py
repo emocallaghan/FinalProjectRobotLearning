@@ -37,7 +37,7 @@ class WorldEditor:
             x2 = min([self.creatingWall[0],x])
             y1 = max([self.creatingWall[1],y])
             y2 = min([self.creatingWall[1],y])                
-            if event.type  == MOUSEBUTTONUP:  
+            if event.type  == MOUSEBUTTONUP and x1!=x2 and y1!=y2:  
                 self.model.preWall = None
                 self.model.createWalls([x2,y2],[x1-x2,y1-y2])               
             elif x1 != x2 and y1 !=y2: 
